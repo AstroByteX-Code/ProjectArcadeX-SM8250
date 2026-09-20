@@ -1,37 +1,52 @@
 # ==============================================================================
-# Patch: Fix Vibration HAL (AstroROM style)
+# Patch: Vibrator HAL AIDL Migration
 # Context:
-#   - Removes outdated vibrator HAL/service stubs
-#   - Injects stable V3 NDK platform blobs from y2q firmware
-#   - Registers context for proper packaging and HAL execution
+#   - Removes legacy vibrator HIDL services
+#   - Patches manifest to drop old HAL entries
+#   - Injects AIDL vibrator HAL from a52 donor
+#   - Adds supporting libs from a73 and source firmware
 # ==============================================================================
 
-LOG_BEGIN "Fixing Vibration..."
+# --------------------------------------------------------------------------
+# Remove outdated vibrator HAL services
+# --------------------------------------------------------------------------
+LOG_BEGIN "Removing legacy vibrator HIDL services..."
 
-# Remove old vibrator HAL/service stubs
 SILENT REMOVE "vendor" "bin/hw/vendor.samsung.hardware.vibrator@2.2-service"
 SILENT REMOVE "vendor" "etc/init/vendor.samsung.hardware.vibrator@2.2-service.rc"
 SILENT REMOVE "vendor" "lib64/vendor.samsung.hardware.vibrator@2.0.so"
 SILENT REMOVE "vendor" "lib64/vendor.samsung.hardware.vibrator@2.1.so"
 SILENT REMOVE "vendor" "lib64/vendor.samsung.hardware.vibrator@2.2.so"
-SILENT REMOVE "vendor" "lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so"
-SILENT REMOVE "vendor" "etc/init/vendor.samsung.hardware.vibrator-default.rc"
-SILENT REMOVE "vendor" "bin/hw/vendor.samsung.hardware.vibrator-service"
-SILENT REMOVE "vendor" "etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml"
-LOG_INFO "Removed outdated vibrator HAL and service stubs"
 
-# Inject stable vibrator blobs from y2q firmware
-ADD_FROM_FW "y2q" "vendor" "lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so"
-ADD_FROM_FW "y2q" "vendor" "etc/init/vendor.samsung.hardware.vibrator-default.rc"
-ADD_FROM_FW "y2q" "vendor" "bin/hw/vendor.samsung.hardware.vibrator-service"
-ADD_FROM_FW "y2q" "vendor" "etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml"
-LOG_INFO "Injected vibrator V3 NDK platform blobs from y2q firmware"
+LOG_END "Legacy vibrator services removed"
 
-# Register context for vibrator blobs
-ADD_CONTEXT "vendor" "lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so" "vendor_file"
-ADD_CONTEXT "vendor" "etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml" "vendor_configs_file"
-ADD_CONTEXT "vendor" "etc/init/vendor.samsung.hardware.vibrator-default.rc" "vendor_configs_file"
+# --------------------------------------------------------------------------
+# Patch manifest to remove old vibrator HAL entries
+# --------------------------------------------------------------------------
+LOG_BEGIN "Patching /vendor/etc/vintf/manifest.xml"
+
+EVAL "sed -i '/<hal format=\"hidl\">.*/{:a;N;/<\/hal>/!ba;/android.hardware.vibrator/d}' \"$WORKSPACE/vendor/etc/vintf/manifest.xml\""
+EVAL "sed -i '/<hal format=\"hidl\">.*/{:a;N;/<\/hal>/!ba;/vendor.samsung.hardware.vibrator/d}' \"$WORKSPACE/vendor/etc/vintf/manifest.xml\""
+
+LOG_END "Manifest patch complete"
+
+# --------------------------------------------------------------------------
+# Inject AIDL vibrator HAL
+# --------------------------------------------------------------------------
+LOG_BEGIN "Injecting AIDL vibrator HAL from a52 donor..."
+
+ADD_FROM_FW "a52" "vendor" "bin/hw/vendor.samsung.hardware.vibrator-service"
 ADD_CONTEXT "vendor" "bin/hw/vendor.samsung.hardware.vibrator-service" "hal_vibrator_default_exec"
-LOG_INFO "Registered vibrator blobs in AstroROM context"
 
-LOG_END "Vibration HAL fix applied successfully"
+ADD_FROM_FW "a52" "vendor" "etc/init/vendor.samsung.hardware.vibrator-default.rc"
+ADD_CONTEXT "vendor" "etc/init/vendor.samsung.hardware.vibrator-default.rc" "vendor_file"
+
+ADD_FROM_FW "a52" "vendor" "etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml"
+ADD_CONTEXT "vendor" "etc/vintf/manifest/vendor.samsung.hardware.vibrator-default.xml" "vendor_file"
+
+ADD_FROM_FW "a52" "vendor" "lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so"
+ADD_CONTEXT "vendor" "lib64/vendor.samsung.hardware.vibrator-V3-ndk_platform.so" "vendor_file"
+
+LOG_END "AIDL vibrator HAL injection complete"
+
+
