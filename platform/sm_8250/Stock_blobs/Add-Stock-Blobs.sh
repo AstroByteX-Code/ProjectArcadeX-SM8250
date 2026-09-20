@@ -75,25 +75,16 @@ LOG_INFO "Injected updated clearsideviewcover permission"
 
 LOG_END "Wireless Charge patch applied successfully"
 
-LOG_BEGIN "Adding Stock TUI App..."
-
-# Add Qualcomm TUI secure UI service
-ADD_FROM_FW "y2q" "system" "system_ext/app/com.qualcomm.qti.services.secureui"
-ADD_FROM_FW "y2q" "system" "etc/sysconfig/preinstalled-packages-com.qualcomm.qti.services.secureui.xml"
-LOG_INFO "Injected Qualcomm TUI secure UI service from y2q firmware"
-
-LOG_END "TUI patch applied successfully"
-
 LOG_BEGIN "Adding libhwui from a73..."
 
-# Add libhwui from a73 firmware
-ADD_FROM_FW "a73" "system" "lib/libhwui.so"
-ADD_FROM_FW "a73" "system" "lib64/libhwui.so"
+# Add libhwui from r9q firmware
+ADD_FROM_FW "r9q" "system" "lib/libhwui.so"
+ADD_FROM_FW "r9q" "system" "lib64/libhwui.so"
 LOG_INFO "Injected libhwui (32‑bit and 64‑bit) from a73 firmware"
 
 LOG_END "libhwui patch applied successfully"
 
-LOG_BEGIN "Adding a73 Keymaster libs..."
+LOG_BEGIN "Adding r9q Keymaster libs..."
 
 # Remove KeyMint/secureclock stubs
 SILENT REMOVE "system" "lib/android.hardware.security.keymint-V2-ndk.so"
@@ -105,16 +96,16 @@ SILENT REMOVE "system" "lib64/libdk_native_keymint.so"
 SILENT REMOVE "system" "lib64/vendor.samsung.hardware.keymint-V2-ndk.so"
 LOG_INFO "Removed KeyMint and secureclock stubs"
 
-# Inject keymaster libs from a73 firmware
-ADD_FROM_FW "a73" "system" "lib/android.hardware.keymaster@3.0.so"
-ADD_FROM_FW "a73" "system" "lib/android.hardware.keymaster@4.0.so"
-ADD_FROM_FW "a73" "system" "lib/android.hardware.keymaster@4.1.so"
-ADD_FROM_FW "a73" "system" "lib/lib_nativeJni.dk.samsung.so"
-ADD_FROM_FW "a73" "system" "lib/libdk_native_keymaster.so"
-ADD_FROM_FW "a73" "system" "lib/libkeymaster4_1support.so"
-ADD_FROM_FW "a73" "system" "lib/libkeymaster4support.so"
-ADD_FROM_FW "a73" "system" "lib64/lib_nativeJni.dk.samsung.so"
-ADD_FROM_FW "a73" "system" "lib64/libdk_native_keymaster.so"
+# Inject keymaster libs from r9q firmware
+ADD_FROM_FW "r9q" "system" "lib/android.hardware.keymaster@3.0.so"
+ADD_FROM_FW "r9q" "system" "lib/android.hardware.keymaster@4.0.so"
+ADD_FROM_FW "r9q" "system" "lib/android.hardware.keymaster@4.1.so"
+ADD_FROM_FW "r9q" "system" "lib/lib_nativeJni.dk.samsung.so"
+ADD_FROM_FW "r9q" "system" "lib/libdk_native_keymaster.so"
+ADD_FROM_FW "r9q" "system" "lib/libkeymaster4_1support.so"
+ADD_FROM_FW "r9q" "system" "lib/libkeymaster4support.so"
+ADD_FROM_FW "r9q" "system" "lib64/lib_nativeJni.dk.samsung.so"
+ADD_FROM_FW "r9q" "system" "lib64/libdk_native_keymaster.so"
 LOG_INFO "Injected keymaster libraries from a73 firmware"
 
 # Register context for injected keymaster libs
@@ -129,19 +120,19 @@ ADD_CONTEXT "system" "lib64/lib_nativeJni.dk.samsung.so" "system_file"
 ADD_CONTEXT "system" "lib64/libdk_native_keymaster.so" "system_file"
 LOG_INFO "Registered keymaster libs in AstroROM context"
 
-LOG_END "a73 Keymaster patch applied successfully"
+LOG_END "r9q Keymaster patch applied successfully"
 
 LOG_BEGIN "Fixing MIDAS, AI and Camera..."
 
 # Inject camera and AI libs from stock firmware
-ADD_FROM_FW "stock" "system" "etc/public.libraries-camera.samsung.txt"
-ADD_FROM_FW "y2q" "system" "lib64/libSlowShutter_jni.media.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/lib_nativeJni.dk.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libmidas_DNNInterface.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libmidas_core.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libsamsung_videoengine_9_0.so"
-ADD_FROM_FW "stock" "system" "lib64/libtensorflowLite.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libtensorflowlite_inference_api.camera.samsung.so"
+ADD_FROM_FW "a73" "system" "etc/public.libraries-camera.samsung.txt"
+ADD_FROM_FW "a73" "system" "lib64/libSlowShutter_jni.media.samsung.so"
+ADD_FROM_FW "a73" "system" "lib64/lib_nativeJni.dk.samsung.so"
+ADD_FROM_FW "a73" "system" "lib64/libmidas_DNNInterface.camera.samsung.so"
+ADD_FROM_FW "a73" "system" "lib64/libmidas_core.camera.samsung.so"
+ADD_FROM_FW "a73" "system" "lib64/libsamsung_videoengine_9_0.so"
+ADD_FROM_FW "a73" "system" "lib64/libtensorflowLite.camera.samsung.so"
+ADD_FROM_FW "a73" "system" "lib64/libtensorflowlite_inference_api.camera.samsung.so"
 LOG_INFO "Injected MIDAS, AI and camera libraries from stock firmware"
 
 # Register context for injected libs
@@ -189,40 +180,4 @@ ADD_CONTEXT "system" "etc/permissions/com.sec.feature.nfc_authentication_cover.x
 LOG_INFO "Registered NFC blobs and cover permissions in AstroROM context"
 
 LOG_END "pa1q NFC patch applied successfully"
-
-# ADD TrustedUI Blobs
-LOG_BEGIN "- Adding TrustedUI/TUI blobs"
-
-ADD_FROM_FW "main" "vendor" "lib/vendor.qti.hardware.trustedui@1.0.so"
-ADD_FROM_FW "main" "vendor" "lib/vendor.qti.hardware.trustedui@1.1.so"
-ADD_FROM_FW "main" "vendor" "lib/vendor.qti.hardware.trustedui@1.2.so"
-ADD_FROM_FW "main" "vendor" "lib/vendor.qti.hardware.tui_comm@1.0.so"
-
-ADD_FROM_FW "main" "vendor" "lib64/vendor.qti.hardware.trustedui@1.0.so"
-ADD_FROM_FW "main" "vendor" "lib64/vendor.qti.hardware.trustedui@1.1.so"
-ADD_FROM_FW "main" "vendor" "lib64/vendor.qti.hardware.trustedui@1.2.so"
-ADD_FROM_FW "main" "vendor" "lib64/vendor.qti.hardware.tui_comm@1.0.so"
-
-# Move blobs into system partition (use $WORKSPACE, not /vendor)
-mv "$WORKSPACE/vendor/lib/vendor.qti.hardware.trustedui@1.0.so" "$WORKSPACE/system/system/lib/"
-mv "$WORKSPACE/vendor/lib/vendor.qti.hardware.trustedui@1.1.so" "$WORKSPACE/system/system/lib/"
-mv "$WORKSPACE/vendor/lib/vendor.qti.hardware.trustedui@1.2.so" "$WORKSPACE/system/system/lib/"
-
-mv "$WORKSPACE/vendor/lib64/vendor.qti.hardware.trustedui@1.0.so" "$WORKSPACE/system/system/lib64/"
-mv "$WORKSPACE/vendor/lib64/vendor.qti.hardware.trustedui@1.1.so" "$WORKSPACE/system/system/lib64/"
-mv "$WORKSPACE/vendor/lib64/vendor.qti.hardware.trustedui@1.2.so" "$WORKSPACE/system/system/lib64/"
-
-ADD_CONTEXT "system" "lib/vendor.qti.hardware.trustedui@1.0.so" "system_file"
-ADD_CONTEXT "system" "lib/vendor.qti.hardware.trustedui@1.1.so" "system_file"
-ADD_CONTEXT "system" "lib/vendor.qti.hardware.trustedui@1.2.so" "system_file"
-ADD_CONTEXT "system" "lib/vendor.qti.hardware.tui_comm@1.0.so" "system_file"
-
-ADD_CONTEXT "system" "lib64/vendor.qti.hardware.trustedui@1.0.so" "system_file"
-ADD_CONTEXT "system" "lib64/vendor.qti.hardware.trustedui@1.1.so" "system_file"
-ADD_CONTEXT "system" "lib64/vendor.qti.hardware.trustedui@1.2.so" "system_file"
-ADD_CONTEXT "system" "lib64/vendor.qti.hardware.tui_comm@1.0.so" "system_file"
-
-
-LOG_END "TrustedUI/TUI blobs added successfully"
-
 
