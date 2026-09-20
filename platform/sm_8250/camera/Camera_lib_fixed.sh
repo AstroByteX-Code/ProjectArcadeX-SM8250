@@ -2,7 +2,7 @@
 # Patch: Camera HAL Cleanup & Injection (AstroROM style)
 # Context:
 #   - Removes outdated system camera libs
-#   - Injects stable camera libs from stock, p3q, r9q firmware
+#   - Injects stable camera libs from stock, p3q, a73 firmware
 #   - Registers context for proper packaging and HAL execution
 # ==============================================================================
 
@@ -69,75 +69,67 @@ LOG_INFO "Outdated camera libraries removed successfully"
 
 LOG_BEGIN "Adding Camera Libraries..."
 
-# Inject stable camera libs from stock firmware
-LOG_INFO "Injecting camera libraries from stock firmware..."
-ADD_FROM_FW "stock" "system" "etc/public.libraries-arcsoft.txt"
-ADD_FROM_FW "stock" "system" "lib64/libAiSolution_wrapper_v1.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libBright_core.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libFacePreProcessing.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libFaceRestoration.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libFace_Landmark_API.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libFace_Landmark_Engine.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libHprFace_GAE_api.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libHpr_RecFace_dl_v1.0.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libHpr_RecGAE_cvFeature_v1.0.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libHpr_TaskFaceClustering_hierarchical_v1.0.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libImageCropper.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libImageTagger.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libPortraitDistortionCorrection.arcsoft.so"
-ADD_FROM_FW "stock" "system" "lib64/libPortraitDistortionCorrectionCali.arcsoft.so"
-ADD_FROM_FW "stock" "system" "lib64/libUltraWideDistortionCorrection.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libWideDistortionCorrection.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libhumantracking_util.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libhumantracking.arcsoft.so"
-ADD_FROM_FW "stock" "system" "lib64/liblow_light_hdr.arcsoft.so"
-ADD_FROM_FW "stock" "system" "lib64/libsaiv_HprFace_cmh_support_jni.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libtensorflowLite.dynamic_viewing.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libtensorflowlite_jni_r2.6.so"
+# --------------------------------------------------------------------------
+# Inject Polarr libraries
+# --------------------------------------------------------------------------
+LOG_BEGIN "Injecting Polarr libraries from a73 donor..."
 
-LOG_INFO "Camera libraries injected successfully"
+ADD_FROM_FW "a73" "system" "system/etc/public.libraries-polarr.txt"
+ADD_CONTEXT "system" "system/etc/public.libraries-polarr.txt" "system_file"
 
-# Register context for injected camera libs
-LOG_INFO "Registering context for camera libraries..."
-ADD_CONTEXT "system" "etc/public.libraries-arcsoft.txt" "system_file"
-ADD_CONTEXT "system" "lib64/libAiSolution_wrapper_v1.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libBright_core.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libFacePreProcessing.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libFaceRestoration.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libFace_Landmark_API.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libFace_Landmark_Engine.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libHprFace_GAE_api.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libHpr_RecFace_dl_v1.0.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libHpr_RecGAE_cvFeature_v1.0.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libHpr_TaskFaceClustering_hierarchical_v1.0.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libImageCropper.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libImageTagger.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libPortraitDistortionCorrection.arcsoft.so" "system_file"
-ADD_CONTEXT "system" "lib64/libPortraitDistortionCorrectionCali.arcsoft.so" "system_file"
-ADD_CONTEXT "system" "lib64/libUltraWideDistortionCorrection.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libWideDistortionCorrection.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libhumantracking_util.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libhumantracking.arcsoft.so" "system_file"
-ADD_CONTEXT "system" "lib64/liblow_light_hdr.arcsoft.so" "system_file"
-ADD_CONTEXT "system" "lib64/libsaiv_HprFace_cmh_support_jni.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libtensorflowLite.dynamic_viewing.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libtensorflowlite_jni_r2.6.so" "system_file"
+ADD_FROM_FW "a73" "system" "system/lib64/libBestComposition.polarr.so"
+ADD_CONTEXT "system" "system/lib64/libBestComposition.polarr.so" "system_file"
 
-LOG_END "Camera libraries patch applied successfully"
+ADD_FROM_FW "a73" "system" "system/lib64/libFeature.polarr.so"
+ADD_CONTEXT "system" "system/lib64/libFeature.polarr.so" "system_file"
 
-LOG_BEGIN "Patching Camera Processing..."
+ADD_FROM_FW "a73" "system" "system/lib64/libPolarrSnap.polarr.so"
+ADD_CONTEXT "system" "system/lib64/libPolarrSnap.polarr.so" "system_file"
 
-# MultiFrame Processing (Stock firmware)
-LOG_INFO "Injecting MultiFrame Processing libs from y2q firmware..."
-ADD_FROM_FW "stock" "system" "lib64/libMultiFrameProcessing30.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libMultiFrameProcessing30.snapwrapper.camera.samsung.so"
-ADD_FROM_FW "stock" "system" "lib64/libMultiFrameProcessing30Tuning.camera.samsung.so"
+ADD_FROM_FW "a73" "system" "system/lib64/libTracking.polarr.so"
+ADD_CONTEXT "system" "system/lib64/libTracking.polarr.so" "system_file"
 
-ADD_CONTEXT "system" "lib64/libMultiFrameProcessing30.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libMultiFrameProcessing30.snapwrapper.camera.samsung.so" "system_file"
-ADD_CONTEXT "system" "lib64/libMultiFrameProcessing30Tuning.camera.samsung.so" "system_file"
+ADD_FROM_FW "a73" "system" "system/lib64/libYuv.polarr.so"
+ADD_CONTEXT "system" "system/lib64/libYuv.polarr.so" "system_file"
 
-LOG_INFO "MultiFrame Processing libs injected successfully"
+LOG_END "Polarr libraries injection complete"
+
+# --------------------------------------------------------------------------
+# Inject Camera libraries
+# --------------------------------------------------------------------------
+LOG_BEGIN "Injecting camera libraries from stock firmware..."
+
+ADD_FROM_FW "stock" "system" "system/lib64/libhigh_dynamic_range.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/libhigh_dynamic_range.arcsoft.so" "system_file"
+
+ADD_FROM_FW "stock" "system" "system/lib64/libhigh_res.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/libhigh_res.arcsoft.so" "system_file"
+EVAL "echo \"libhigh_res.arcsoft.so\" >> \"$WORKSPACE/system/system/etc/public.libraries-arcsoft.txt\""
+
+ADD_FROM_FW "stock" "system" "system/lib64/libhumantracking.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/libhumantracking.arcsoft.so" "system_file"
+
+ADD_FROM_FW "stock" "system" "system/lib64/libhumantracking_util.camera.samsung.so"
+ADD_CONTEXT "system" "system/lib64/libhumantracking_util.camera.samsung.so" "system_file"
+
+ADD_FROM_FW "stock" "system" "system/lib64/liblow_light_hdr.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/liblow_light_hdr.arcsoft.so" "system_file"
+
+ADD_FROM_FW "a73" "system" "system/lib64/libsecimaging_pdk.camera.samsung.so"
+ADD_CONTEXT "system" "system/lib64/libsecimaging_pdk.camera.samsung.so" "system_file"
+
+ADD_FROM_FW "stock" "system" "system/lib64/libsuperresolution.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/libsuperresolution.arcsoft.so" "system_file"
+EVAL "echo \"libsuperresolution.arcsoft.so\" >> \"$WORKSPACE/system/system/etc/public.libraries-arcsoft.txt\""
+
+ADD_FROM_FW "stock" "system" "system/lib64/libsuperresolution_wrapper_v2.camera.samsung.so"
+ADD_CONTEXT "system" "system/lib64/libsuperresolution_wrapper_v2.camera.samsung.so" "system_file"
+EVAL "echo \"libsuperresolution_wrapper_v2.camera.samsung.so\" >> \"$WORKSPACE/system/system/etc/public.libraries-camera.samsung.txt\""
+
+ADD_FROM_FW "stock" "system" "system/lib64/libveengine.arcsoft.so"
+ADD_CONTEXT "system" "system/lib64/libveengine.arcsoft.so" "system_file"
+
+LOG_END "Camera libraries injection complete"
 
 # HDR & Super Resolution (p3q firmware)
 LOG_INFO "Injecting HDR and Super Resolution libs from p3q firmware..."
@@ -149,6 +141,9 @@ ADD_FROM_FW "p3q" "system" "lib64/libsuperresolution.arcsoft.so"
 ADD_FROM_FW "p3q" "system" "lib64/libsuperresolution_raw.arcsoft.so"
 ADD_FROM_FW "p3q" "system" "lib64/libsuperresolution_wrapper_v2.camera.samsung.so"
 ADD_FROM_FW "p3q" "system" "lib64/libsuperresolutionraw_wrapper_v2.camera.samsung.so"
+ADD_FROM_FW "p3q" "system" "lib64/libMultiFrameProcessing30.camera.samsung.so"
+ADD_FROM_FW "p3q" "system" "lib64/libMultiFrameProcessing30.snapwrapper.camera.samsung.so"
+ADD_FROM_FW "p3q" "system" "lib64/libMultiFrameProcessing30Tuning.camera.samsung.so"
 
 ADD_CONTEXT "system" "lib64/libeden_wrapper_system.so" "system_file"
 ADD_CONTEXT "system" "lib64/libhigh_dynamic_range.arcsoft.so" "system_file"
@@ -173,3 +168,16 @@ ADD_CONTEXT "vendor" "lib64/X12QS_libTsAe.so" "vendor_file"
 LOG_INFO "HDR10+ support libs injected successfully"
 
 LOG_END "Camera Processing & HDR10+ patch applied successfully"
+
+# --------------------------------------------------------------------------
+# Inject supporting libraries
+# --------------------------------------------------------------------------
+LOG_BEGIN "Injecting supporting libraries..."
+
+ADD_FROM_FW "a73" "vendor" "lib64/libsnaplite_native.so"
+ADD_CONTEXT "vendor" "lib64/libsnaplite_native.so" "same_process_hal_file"
+
+ADD_FROM_FW "main" "vendor" "lib/rfsa/adsp/libcamera_nn_skel.so"
+ADD_CONTEXT "vendor" "lib/rfsa/adsp/libcamera_nn_skel.so" "vendor_file"
+
+LOG_END "Supporting libraries injection complete"
